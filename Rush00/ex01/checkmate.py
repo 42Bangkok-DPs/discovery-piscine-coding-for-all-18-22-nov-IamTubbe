@@ -1,15 +1,74 @@
+def read_board(file_path):
+    
+    try:
+        with open(file_path, 'r') as f:
+            board = [line.strip() for line in f.readlines()]
+            if all(len(row) == len(board) for row in board):
+                return board
+            else:
+                return None
+    except FileNotFoundError:
+        return None
+
+def process_board(board):
+
+    if not is_valid_board(board):
+        return "Error"
+    try:
+        if is_king_checked(board):
+            return "Success"
+        else:
+            return "Fail"
+    except Exception:
+        return "Error"
+    
+def is_valid_board(board):
+    
+    if board is None:
+        return False
+    
+    king_count = sum(row.count('K') for row in board)
+    if king_count != 1:
+        return False
+
+    board_size = len(board)
+    if not all(len(row) == board_size for row in board):
+        return False
+    
+    piece_counts = {
+        'P': 0,
+        'B': 0,
+        'R': 0,
+        'Q': 0,
+        'K': 0
+    }
+
+    for row in board:
+        for cell in row:
+            if cell in piece_counts:
+                piece_counts[cell] += 1
+            elif cell != '.':
+                return False
+
+    if piece_counts['Q'] > 1:
+        print("There must be exactly one Queen or fewer.")
+        return False
+    if piece_counts['B'] > 2:
+        print("There must be exactly two Bishops or fewer.")
+        return False
+    if piece_counts['P'] > 8:
+        print("There must be exactly eight Pawns or fewer.")
+        return False
+    if piece_counts['R'] > 2:
+        print("There must be exactly two Rooks or fewer.")
+        return False
+
+    return True
+
 def is_king_checked(board):
-    """
-    Checks if the King ('K') is in check on a chessboard.
-    :param board: List of strings representing rows of the chessboard.
-    :return: True if the King is in check, False otherwise.
-    """
+
     n = len(board)
     king_positions = [(i, row.index('K')) for i, row in enumerate(board) if 'K' in row]
-
-    # Ensure there's exactly one King
-    if len(king_positions) != 1:
-        raise ValueError("Invalid board: there must be exactly one King")
 
     kx, ky = king_positions[0]
 
