@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-from checkmate import is_king_checked
+from checkmate import validate_board, is_king_checked
 
 if __name__ == "__main__":
-    # Input board as a list of strings (rows)
     board = [
-        "....",
-        ".K..",
-        "..R.",
-        "...."
+        "R.......",
+        ".K......",
+        "..P.....",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........"
     ]
     
-    is_king_checked(board)
+    if validate_board(board):
+        is_king_checked(board)
