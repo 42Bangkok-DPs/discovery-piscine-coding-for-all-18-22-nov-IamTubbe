@@ -46,6 +46,7 @@ def validate_board(board):
     return True
 
 def is_king_checked(board):
+    
     n = len(board)
 
     king_pos = None
